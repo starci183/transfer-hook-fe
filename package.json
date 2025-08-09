@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
     "@heroui/react": "2.7.11",
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
     "@phosphor-icons/react": "^2.1.10",

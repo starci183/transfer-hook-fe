@@ -1,9 +1,9 @@
 "use client";
-import { Button, Link, Navbar, NavbarBrand, NavbarContent, Image, NavbarItem, useDisclosure, ModalBody, Modal, ModalContent, ModalHeader } from "@heroui/react";
+import { Button, Link, Navbar, NavbarBrand, NavbarContent, Image, NavbarItem, useDisclosure, ModalBody, Modal, ModalContent, ModalHeader, ModalFooter } from "@heroui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 export const CustomNavbar = () => {
-    const { select, wallets, wallet, connected } = useWallet()
+    const { select, wallets, wallet, connected, disconnect } = useWallet()
     const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure()
     const router = useRouter();
     return (
@@ -83,6 +83,13 @@ export const CustomNavbar = () => {
                             )
                         }
                     </ModalBody>
+                    <ModalFooter>
+                        <Button onPress={
+                            disconnect
+                        }>
+                            Disconnect
+                        </Button>
+                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>

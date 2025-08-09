@@ -4,7 +4,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Keypair, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
-import { createInitializeMetadataPointerInstruction, createInitializeMintInstruction, createInitializeTransferHookInstruction, ExtensionType, getMintLen, LENGTH_SIZE, MINT_SIZE, TOKEN_2022_PROGRAM_ID, TYPE_SIZE } from "@solana/spl-token";
+import { createAssociatedTokenAccountInstruction, createInitializeMetadataPointerInstruction, createInitializeMintInstruction, createInitializeTransferHookInstruction, createMintToInstruction, ExtensionType, getAssociatedTokenAddress, getMintLen, getOrCreateAssociatedTokenAccount, LENGTH_SIZE, MINT_SIZE, mintTo, TOKEN_2022_PROGRAM_ID, TYPE_SIZE } from "@solana/spl-token";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import {
     createInitializeInstruction,
@@ -152,6 +152,69 @@ const Page = () => {
 
                 addToast({
                     title: "Token Created",
+                    description: (
+                        <div className="flex items-center gap-2">
+                            <div className="text-sm">Tx</div>
+                            <Link
+                                href={`https://explorer.solana.com/tx/${sig}?cluster=devnet`}
+                                target="_blank"
+                                className="text-blue-500 hover:underline"
+                            >
+                                {sig?.slice(0, 6)}...{sig?.slice(-4)}
+                            </Link>
+                        </div>
+                    ),
+                });
+                const fetchAta = await getAssociatedTokenAddress(
+                    mint.publicKey,
+                    wallet?.adapter.publicKey!,
+                    true,
+                    TOKEN_2022_PROGRAM_ID
+                );
+                // create ata
+                const ata = createAssociatedTokenAccountInstruction(
+                    wallet?.adapter.publicKey!,
+                    fetchAta,
+                    wallet?.adapter.publicKey!,
+                    mint.publicKey,
+                    TOKEN_2022_PROGRAM_ID
+                );
+                // send transaction
+                const tx2 = new Transaction().add(ata);
+                await wallet?.adapter.sendTransaction(tx2, connection, {
+                    preflightCommitment: "confirmed",
+                });
+                addToast({
+                    title: "Associated Token Account Created",
+                    description: (
+                        <div className="flex items-center gap-2">
+                            <div className="text-sm">Tx</div>
+                            <Link
+                                href={`https://explorer.solana.com/tx/${sig}?cluster=devnet`}
+                                target="_blank"
+                                className="text-blue-500 hover:underline"
+                            >
+                                {sig?.slice(0, 6)}...{sig?.slice(-4)}
+                            </Link>
+                        </div>
+                    ),
+                });
+                console.log("fetchAta", fetchAta.toBase58());
+                // after that, mint 1m tokens
+                const mintInstruction = createMintToInstruction(
+                    mint.publicKey,
+                    fetchAta,
+                    wallet?.adapter.publicKey!,
+                    BigInt(1_000_000_000),
+                    [],
+                    TOKEN_2022_PROGRAM_ID
+                );
+                const mintTx = new Transaction().add(mintInstruction);
+                await wallet?.adapter.sendTransaction(mintTx, connection, {
+                    preflightCommitment: "confirmed",
+                });
+                addToast({
+                    title: "Mint 1k tokens",
                     description: (
                         <div className="flex items-center gap-2">
                             <div className="text-sm">Tx</div>
