@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { WrappedLayout } from "./WrappedLayout";
 import "./globals.css";
-import { CustomNavbar } from "./Navbar/page";
+import { CustomNavbar } from "./Navbar"
 import { Spacer } from "@heroui/react";
 
 const geistSans = localFont({
