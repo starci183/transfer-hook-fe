@@ -201,27 +201,29 @@ const AddLiquidityPage = () => {
             positionNftAccount,
             protocolPosition: Keypair.generate().publicKey,
             // disable type checking
+            // @ts-ignore
             tickArrayLower: tickArrayLowerPda,
+            // @ts-ignore
             tickArrayUpper: tickArrayUpperPda,
           })
           .signers([positionNftMint])
           .remainingAccounts([{
             pubkey: PublicKey.findProgramAddressSync(
               [Buffer.from("counter")],
-              new PublicKey("9bUPPxMFGzdwyjWCUkZhDtgKoKQXKzFXPaEvTPcnoyaA")
+              new PublicKey("ELtetBxqUZzsv2P98edTEK6cbvJDz9b3CSP6iurgXZWq")
             )[0],
             isSigner: false,
             isWritable: true, // This should be writable to allow the transfer hook to modify the account
           },
           {
-            pubkey: new PublicKey("9bUPPxMFGzdwyjWCUkZhDtgKoKQXKzFXPaEvTPcnoyaA"),
+            pubkey: new PublicKey("ELtetBxqUZzsv2P98edTEK6cbvJDz9b3CSP6iurgXZWq"),
             isSigner: false,
             isWritable: true, // This should be writable to allow the transfer hook to modify the
           },
           {
             pubkey: PublicKey.findProgramAddressSync(
               [Buffer.from("extra-account-metas"), token0Mint.toBuffer()],
-              new PublicKey("9bUPPxMFGzdwyjWCUkZhDtgKoKQXKzFXPaEvTPcnoyaA")
+              new PublicKey("ELtetBxqUZzsv2P98edTEK6cbvJDz9b3CSP6iurgXZWq")
             )[0],
             isSigner: false,
             isWritable: true, // This should be writable to allow the transfer hook to modify the account

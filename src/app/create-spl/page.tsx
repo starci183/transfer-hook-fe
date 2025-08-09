@@ -214,7 +214,7 @@ const Page = () => {
                     mint.publicKey,
                     fetchAta,
                     wallet?.adapter.publicKey!,
-                    BigInt(1_000_000_000),
+                    BigInt(1_000_000_000_000),
                     [],
                     TOKEN_2022_PROGRAM_ID
                 );
@@ -223,7 +223,7 @@ const Page = () => {
                     preflightCommitment: "confirmed",
                 });
                 addToast({
-                    title: "Mint 1k tokens",
+                    title: "Mint 1M tokens",
                     description: (
                         <div className="flex items-center gap-2">
                             <div className="text-sm">Tx</div>

@@ -219,20 +219,20 @@ const SwapPage = () => {
             {
               pubkey: PublicKey.findProgramAddressSync(
                 [Buffer.from("counter")],
-                new PublicKey("9bUPPxMFGzdwyjWCUkZhDtgKoKQXKzFXPaEvTPcnoyaA")
+                new PublicKey("ELtetBxqUZzsv2P98edTEK6cbvJDz9b3CSP6iurgXZWq")
               )[0],
               isSigner: false,
               isWritable: true,
             },
             {
-              pubkey: new PublicKey("9bUPPxMFGzdwyjWCUkZhDtgKoKQXKzFXPaEvTPcnoyaA"),
+              pubkey: new PublicKey("ELtetBxqUZzsv2P98edTEK6cbvJDz9b3CSP6iurgXZWq"),
               isSigner: false,
               isWritable: true,
             },
             {
               pubkey: PublicKey.findProgramAddressSync(
                 [Buffer.from("extra-account-metas"), inputTokenMint.toBuffer()],
-                new PublicKey("9bUPPxMFGzdwyjWCUkZhDtgKoKQXKzFXPaEvTPcnoyaA")
+                new PublicKey("ELtetBxqUZzsv2P98edTEK6cbvJDz9b3CSP6iurgXZWq")
               )[0],
               isSigner: false,
               isWritable: true,

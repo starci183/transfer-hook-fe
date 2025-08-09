@@ -19,13 +19,18 @@ export const CustomNavbar = () => {
                         </Link>
                     </NavbarItem>
                     <NavbarItem isActive>
-                        <Link aria-current="page" href="#">
-                            Customers
+                        <Link aria-current="page" onPress={() => router.push("/create-pool")} color="foreground">
+                            Create Pool
                         </Link>
                     </NavbarItem>
                     <NavbarItem>
-                        <Link color="foreground" href="#">
-                            Integrations
+                        <Link color="foreground" onPress={() => router.push("/add-liquidity")}>
+                            Add Liquidity
+                        </Link>
+                    </NavbarItem>
+                    <NavbarItem>
+                        <Link color="foreground" onPress={() => router.push("/swap")}>
+                            Swap
                         </Link>
                     </NavbarItem>
                 </NavbarContent>

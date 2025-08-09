@@ -25,7 +25,7 @@ const CounterPage = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
   const [counter, setCounter] = React.useState<number | null>(null);
-  const [transferHookProgramId] = React.useState(new PublicKey("9bUPPxMFGzdwyjWCUkZhDtgKoKQXKzFXPaEvTPcnoyaA"));
+  const [transferHookProgramId] = React.useState(new PublicKey("ELtetBxqUZzsv2P98edTEK6cbvJDz9b3CSP6iurgXZWq"));
 
   React.useEffect(() => {
     setMounted(true);
