@@ -84,7 +84,7 @@ export const CustomNavbar = () => {
                         }
                     </ModalBody>
                     <ModalFooter>
-                        <Button onPress={
+                        <Button fullWidth color="danger" onPress={
                             disconnect
                         }>
                             Disconnect

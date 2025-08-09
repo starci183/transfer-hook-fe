@@ -5,13 +5,16 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Keypair, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { createAssociatedTokenAccountInstruction, createInitializeMetadataPointerInstruction, createInitializeMintInstruction, createInitializeTransferHookInstruction, createMintToInstruction, ExtensionType, getAssociatedTokenAddress, getMintLen, getOrCreateAssociatedTokenAccount, LENGTH_SIZE, MINT_SIZE, mintTo, TOKEN_2022_PROGRAM_ID, TYPE_SIZE } from "@solana/spl-token";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { useWallet, useConnection, useAnchorWallet } from "@solana/wallet-adapter-react";
 import {
     createInitializeInstruction,
     createUpdateFieldInstruction,
     pack,
     TokenMetadata,
 } from "@solana/spl-token-metadata";
+import * as anchor from "@coral-xyz/anchor";
+import transferHookIdl from "../../idl/transfer-hook-idl.json";
+import { TransferHook } from "../../idl/transfer-hook"
 
 // Validation schema
 const TokenSchema = Yup.object().shape({
@@ -32,6 +35,7 @@ const TokenSchema = Yup.object().shape({
 const Page = () => {
     const { wallet } = useWallet()
     const { connection } = useConnection();
+    const anchorWallet = useAnchorWallet();
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -42,7 +46,12 @@ const Page = () => {
         },
         validationSchema: TokenSchema,
         onSubmit: async (values) => {
-            const mint = Keypair.generate();
+            let mint: Keypair = Keypair.generate();
+            while (
+                mint.publicKey.toBuffer().compare(new PublicKey("7z1f66YfSxRgPMKXjBNf762gm2RLQ1gDnn5v3R4oDqeJ").toBuffer()) > 0 // usdc
+            ) {
+                mint = Keypair.generate();
+            }
             const metadataJson = {
                 name: values.name,
                 symbol: values.symbol,
@@ -228,6 +237,37 @@ const Page = () => {
                         </div>
                     ),
                 });
+
+                // add anchor
+                const provider = new anchor.AnchorProvider(
+                      connection,
+                      anchorWallet!,
+                      anchor.AnchorProvider.defaultOptions()
+                    );
+                const program = new anchor.Program<TransferHook>(transferHookIdl, provider)
+                const hash = await program.methods.initializeExtraAccountMetaList()
+                    .accounts({
+                        mint: mint.publicKey,
+                        tokenProgram: TOKEN_2022_PROGRAM_ID,
+                        payer: wallet?.adapter.publicKey!,
+                        })
+                        .rpc()
+                addToast({
+                    title: "Register extra account metadata",
+                    description: (
+                        <div className="flex items-center gap-2">
+                            <div className="text-sm">Tx</div>
+                            <Link
+                                href={`https://explorer.solana.com/tx/${hash}?cluster=devnet`}
+                                target="_blank"
+                                className="text-blue-500 hover:underline"
+                            >
+                                {hash?.slice(0, 6)}...{hash?.slice(-4)}
+                            </Link>
+                        </div>
+                    ),
+                });
+                // Register in the registry
             } catch (err: any) {
                 console.error("Transaction failed:", err);
                 if (!err.logs) {
